@@ -61,6 +61,13 @@ function test_truffle
         # Replace fixed-version pragmas in Gnosis (part of Consensys best practice)
         find contracts test -name '*.sol' -type f -print0 | xargs -0 sed -i -e 's/pragma solidity 0/pragma solidity ^0/'
       fi
+      safesendsol="node_modules/truffle/build/SafeSend.sol"
+      if [ -f "$safesendsol" ]
+      then
+        echo "Replace Truffle's SafeSend.sol with unreleased one..."
+        rm "$safesendsol"
+        wget https://raw.githubusercontent.com/trufflesuite/truffle/develop/packages/truffle-core/lib/testing/SafeSend.sol -o "$safesendsol"
+      fi
       npm run test
     )
     rm -rf "$DIR"
